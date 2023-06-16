@@ -31,9 +31,7 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <SafeAreaView>
-          <Text style={styles.valueText}>
-            {currentValue}
-          </Text>
+          <Text style={styles.valueText}>{currentValue}</Text>
 
           {/* Do create componentRow */}
           <Row>
