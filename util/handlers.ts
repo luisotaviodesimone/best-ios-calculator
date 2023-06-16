@@ -1,19 +1,19 @@
 import { letterCharacters } from '../constants/characters';
 import { ICalculatorState } from './calculator';
 
-export const handleNumber = (value: string | number | undefined, state: ICalculatorState) => {
+export const addCharacter = (
+  value: string | number | undefined,
+  state: ICalculatorState
+): string => {
   const { currentValue } = state;
 
-  if (!value) return state;
-  
+  if (!value) return currentValue;
 
   if (letterCharacters.test(currentValue) || currentValue === '0') {
-    return { currentValue: `${value}` };
+    return value.toString();
   }
 
-  return {
-    currentValue: `${state.currentValue}${value}`,
-  };
+  return `${state.currentValue}${value}`
 };
 
 export const newHandleEqual = (state: ICalculatorState): ICalculatorState => {
