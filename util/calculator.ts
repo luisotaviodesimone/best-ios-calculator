@@ -1,61 +1,32 @@
+import { handleNumber, handlePosNeg, handleEqual } from './handlers';
+
 export interface ICalculatorState {
   currentValue: string;
-  operator: string;
-  previousValue: string;
+  previousValue?: string | null;
+  operator?: string | null;
 }
 
 export const initialState: ICalculatorState = {
   currentValue: '0',
-  operator: '',
   previousValue: '',
+  operator: '',
 };
 
-export const handleNumber = (value: any, state: ICalculatorState) => {
-  if (state.currentValue === '0') {
-    return { currentValue: `${value}` };
-  }
+export type CalculatorAction =
+  | 'number'
+  | 'operator'
+  | 'equal'
+  | 'clear'
+  | 'posneg'
+  | 'percentage';
 
-  return {
-    currentValue: `${state.currentValue}${value}`,
-  };
-};
+const calculatorLogic = (
+  type: CalculatorAction,
+  value: number | string | undefined,
+  state: ICalculatorState
+) => {
+  // const result: ICalculatorState = { ...state };
 
-const handleEqual = (state: ICalculatorState) => {
-  const { currentValue, previousValue, operator } = state;
-
-  const current = parseFloat(currentValue);
-  const previous = parseFloat(previousValue);
-  const resetState = { operator: null, previousValue: null };
-
-  switch (operator) {
-    case '+':
-      return {
-        currentValue: `${previous + current}`,
-        ...resetState,
-      };
-    case '-':
-      return {
-        currentValue: `${previous - current}`,
-        ...resetState,
-      };
-    case '*':
-      return {
-        currentValue: `${previous * current}`,
-        ...resetState,
-      };
-    case '/':
-      return {
-        currentValue: `${previous / current}`,
-        ...resetState,
-      };
-
-    default:
-      return state;
-  }
-};
-
-// calculator function
-const calculator = (type: any, value: any, state: ICalculatorState) => {
   switch (type) {
     case 'number':
       return handleNumber(value, state);
@@ -65,12 +36,12 @@ const calculator = (type: any, value: any, state: ICalculatorState) => {
 
     case 'posneg':
       return {
-        currentValue: `${parseFloat(state.currentValue) * -1}`,
+        currentValue: handlePosNeg(state).toString(),
       };
 
     case 'percentage':
       return {
-        currentValue: `${parseFloat(state.currentValue) * 0.01}`,
+        currentValue: `Operação não implementada`,
       };
 
     case 'operator':
@@ -88,4 +59,4 @@ const calculator = (type: any, value: any, state: ICalculatorState) => {
   }
 };
 
-export default calculator;
+export default calculatorLogic;

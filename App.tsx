@@ -2,21 +2,25 @@ import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Button from './components/Button';
 import Row from './components/Row';
-import calculator, { ICalculatorState, initialState } from './util/calculator';
+import calculatorLogic, {
+  CalculatorAction,
+  ICalculatorState,
+  initialState,
+} from './util/calculator';
 
 // create class component of App
 export default class App extends Component {
   state = initialState;
 
   // handle tap method
-  HandleTap = (type: string, value?: string | number | undefined) => {
+  HandleTap = (type: CalculatorAction, value?: string | number) => {
     this.setState((state: ICalculatorState) => {
       console.log(
         `\n🚀 \n file: App.tsx:15 \n App \n this.setState \n state:`,
         JSON.stringify(state, null, 2)
       );
 
-      return calculator(type, value, state);
+      return calculatorLogic(type, value, state);
     });
   };
 
@@ -45,7 +49,7 @@ export default class App extends Component {
             />
 
             <Button
-              text="%"
+              text="😅"
               theme="secondary"
               onPress={() => this.HandleTap('percentage')}
             />
