@@ -50,6 +50,7 @@ export const newHandleEqual = (state: ICalculatorState): ICalculatorState => {
   // }
 
   return {
+    ...state,
     currentValue: `${current}`,
   };
 };

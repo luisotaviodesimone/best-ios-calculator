@@ -1,9 +1,9 @@
-import { handleNumber, handlePosNeg, handleEqual } from './handlers';
+import { addCharacter, handlePosNeg, handleEqual } from './handlers';
 
 export interface ICalculatorState {
   currentValue: string;
-  previousValue?: string | null;
-  operator?: string | null;
+  previousValue: string | null;
+  operator?: number | string | null;
 }
 
 export const initialState: ICalculatorState = {
@@ -25,38 +25,50 @@ const calculatorLogic = (
   value: number | string | undefined,
   state: ICalculatorState
 ) => {
-  // const result: ICalculatorState = { ...state };
+  let result: ICalculatorState;
 
   switch (type) {
     case 'number':
-      return handleNumber(value, state);
+      result = { ...state, currentValue: addCharacter(value, state) };
+      break;
 
     case 'clear':
-      return initialState;
+      result = initialState;
+      break;
 
     case 'posneg':
-      return {
+      result = {
+        ...state,
         currentValue: handlePosNeg(state).toString(),
+        previousValue: state.currentValue,
       };
+      break;
 
     case 'percentage':
-      return {
+      result = {
+        ...state,
         currentValue: 'Not implemented yet',
       };
+      break;
 
     case 'operator':
-      return {
+      result = {
         operator: value,
         previousValue: state.currentValue,
         currentValue: '0',
       };
+      break;
 
     case 'equal':
-      return handleEqual(state);
+      result = handleEqual(state);
+      break;
 
     default:
-      return state;
+      result = {...state};
+      break;
   }
+
+  return result;
 };
 
 export default calculatorLogic;
