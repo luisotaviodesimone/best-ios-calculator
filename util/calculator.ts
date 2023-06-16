@@ -41,7 +41,7 @@ const calculatorLogic = (
 
     case 'percentage':
       return {
-        currentValue: `Operação não implementada`,
+        currentValue: 'Not implemented yet',
       };
 
     case 'operator':

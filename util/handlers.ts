@@ -1,7 +1,13 @@
+import { letterCharacters } from '../constants/characters';
 import { ICalculatorState } from './calculator';
 
-export const handleNumber = (value: any, state: ICalculatorState) => {
-  if (state.currentValue === '0') {
+export const handleNumber = (value: string | number | undefined, state: ICalculatorState) => {
+  const { currentValue } = state;
+
+  if (!value) return state;
+  
+
+  if (letterCharacters.test(currentValue) || currentValue === '0') {
     return { currentValue: `${value}` };
   }
 
