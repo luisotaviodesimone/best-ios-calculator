@@ -1,4 +1,4 @@
-import { letterCharacters } from '../constants/characters';
+import { letterCharactersRegex } from '../constants/characters';
 import { ICalculatorState } from './calculator';
 
 export const addCharacter = (
@@ -9,7 +9,7 @@ export const addCharacter = (
 
   if (!value) return currentValue;
 
-  if (letterCharacters.test(currentValue) || currentValue === '0') {
+  if (letterCharactersRegex.test(currentValue) || currentValue === '0') {
     return value.toString();
   }
 

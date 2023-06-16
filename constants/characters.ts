@@ -1,2 +1,2 @@
-export const letterCharacters =
+export const letterCharactersRegex =
   /[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ]/g;
