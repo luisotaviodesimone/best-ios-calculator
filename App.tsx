@@ -26,12 +26,13 @@ export default class App extends Component {
 
   // render method
   render() {
+    const { currentValue } = this.state;
+
     return (
       <View style={styles.container}>
-        {/* Status bae here */}
         <SafeAreaView>
-          <Text style={styles.value}>
-            {parseFloat(this.state.currentValue).toLocaleString()}
+          <Text style={styles.valueText}>
+            {currentValue}
           </Text>
 
           {/* Do create componentRow */}
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#202020',
     justifyContent: 'flex-end',
   },
-  value: {
+  valueText: {
     color: '#fff',
     fontSize: 42,
     textAlign: 'right',
