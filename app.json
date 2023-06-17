@@ -1,7 +1,10 @@
 {
   "expo": {
-    "name": "best-ios-calculator",
+    "name": "Best iOS Calculator",
     "slug": "best-ios-calculator",
+    "description": "The best iOS calculator for iOS",
+    "owner": "luisotaviodesimone_inc",
+    "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
