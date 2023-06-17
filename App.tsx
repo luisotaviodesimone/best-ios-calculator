@@ -48,7 +48,7 @@ export default class App extends Component {
             />
 
             <Button
-              text="😅"
+              text="( )"
               theme="secondary"
               onPress={() => this.HandleTap('percentage')}
             />
