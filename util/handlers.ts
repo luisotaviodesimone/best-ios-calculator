@@ -30,37 +30,14 @@ export const removeCharacter = (state: ICalculatorState): string => {
 };
 
 export const handleEqual = (state: ICalculatorState): ICalculatorState => {
-  const { currentValue, previousValue, operator } = state;
+  const { currentValue, previousValue } = state;
 
-  const current = parseFloat(currentValue);
-  const previous = parseFloat(previousValue || '');
-  const resetState = { operator: null, previousValue: null };
+  const solvedMathExpression = eval(currentValue);
 
-  switch (operator) {
-    case '+':
-      return {
-        currentValue: `${previous + current}`,
-        ...resetState,
-      };
-    case '-':
-      return {
-        currentValue: `${previous - current}`,
-        ...resetState,
-      };
-    case '*':
-      return {
-        currentValue: `${previous * current}`,
-        ...resetState,
-      };
-    case '/':
-      return {
-        currentValue: `${previous / current}`,
-        ...resetState,
-      };
-
-    default:
-      return state;
-  }
+  return {
+    ...state,
+    currentValue: `${solvedMathExpression}`,
+  };
 };
 
 export const handlePosNeg = (state: ICalculatorState): number => {
