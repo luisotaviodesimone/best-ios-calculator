@@ -1,15 +1,24 @@
-import { addCharacter, handlePosNeg, handleEqual } from './handlers';
+import { ISelection } from './formatting';
+import {
+  addCharacter,
+  handlePosNeg,
+  handleEqual,
+  removeCharacter,
+} from './handlers';
 
 export interface ICalculatorState {
   currentValue: string;
   previousValue: string | null;
-  operator?: number | string | null;
+  pointerSelection: ISelection;
 }
 
 export const initialState: ICalculatorState = {
   currentValue: '0',
   previousValue: '',
-  operator: '',
+  pointerSelection: {
+    start: 1,
+    end: 1,
+  },
 };
 
 export type CalculatorAction =
@@ -24,14 +33,29 @@ export type CalculatorAction =
 
 const calculatorLogic = (
   type: CalculatorAction,
-  value: number | string | undefined,
+  value: number | string | undefined | ISelection,
   state: ICalculatorState
 ) => {
+  const { currentValue, previousValue, pointerSelection } = state;
   let result: ICalculatorState;
 
   switch (type) {
+    case 'selection':
+      result = {
+        ...state,
+        pointerSelection: value as ISelection,
+      };
+      break;
+
     case 'number':
-      result = { ...state, currentValue: addCharacter(value, state) };
+      result = {
+        ...state,
+        currentValue: addCharacter(value as number | string, state),
+        pointerSelection: {
+          start: pointerSelection.start + 1,
+          end: pointerSelection.end + 1,
+        },
+      };
       break;
 
     case 'clear':
@@ -68,9 +92,13 @@ const calculatorLogic = (
 
     case 'operator':
       result = {
-        operator: value,
+        ...state,
         previousValue: state.currentValue,
-        currentValue: '0',
+        currentValue: addCharacter(value as number | string, state),
+        pointerSelection: {
+          start: pointerSelection.start + 1,
+          end: pointerSelection.end + 1,
+        },
       };
       break;
 
@@ -79,7 +107,7 @@ const calculatorLogic = (
       break;
 
     default:
-      result = {...state};
+      result = { ...state };
       break;
   }
 

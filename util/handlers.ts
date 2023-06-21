@@ -1,19 +1,18 @@
 import { letterCharactersRegex } from '../constants/characters';
 import { ICalculatorState } from './calculator';
+import { replaceCharacters } from './formatting';
 
 export const addCharacter = (
-  value: string | number | undefined,
+  value: string | number,
   state: ICalculatorState
 ): string => {
-  const { currentValue } = state;
+  const { currentValue: mathExpression, pointerSelection } = state;
 
-  if (!value) return currentValue;
-
-  if (letterCharactersRegex.test(currentValue) || currentValue === '0') {
+  if (letterCharactersRegex.test(mathExpression) || mathExpression === '0') {
     return value.toString();
   }
 
-  return `${state.currentValue}${value}`
+  return replaceCharacters(mathExpression, pointerSelection, value.toString());
 };
 
 export const removeCharacter = (state: ICalculatorState): string => {
