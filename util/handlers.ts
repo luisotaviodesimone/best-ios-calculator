@@ -16,43 +16,17 @@ export const addCharacter = (
   return `${state.currentValue}${value}`
 };
 
-export const newHandleEqual = (state: ICalculatorState): ICalculatorState => {
-  const { currentValue, previousValue } = state;
+export const removeCharacter = (state: ICalculatorState): string => {
+  const {
+    currentValue: mathExpression,
+    pointerSelection: { start, end },
+  } = state;
 
-  const current = eval(currentValue);
-  const previous = parseFloat(previousValue || '');
-  const resetState = { operator: null, previousValue: null };
+  if (mathExpression.length === 1) {
+    return '0';
+  }
 
-  // switch (operator) {
-  //   case '+':
-  //     return {
-  //       currentValue: `${previous + current}`,
-  //       ...resetState,
-  //     };
-  //   case '-':
-  //     return {
-  //       currentValue: `${previous - current}`,
-  //       ...resetState,
-  //     };
-  //   case '*':
-  //     return {
-  //       currentValue: `${previous * current}`,
-  //       ...resetState,
-  //     };
-  //   case '/':
-  //     return {
-  //       currentValue: `${previous / current}`,
-  //       ...resetState,
-  //     };
-
-  //   default:
-  //     return state;
-  // }
-
-  return {
-    ...state,
-    currentValue: `${current}`,
-  };
+  return `${mathExpression.slice(0, start - 1)}${mathExpression.slice(end)}`;
 };
 
 export const handleEqual = (state: ICalculatorState): ICalculatorState => {

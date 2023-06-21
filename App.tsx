@@ -109,6 +109,7 @@ export default class App extends Component {
           </Row>
 
           <Row>
+            <Button text="DEL" onPress={() => this.HandleTap('delete')} />
             <Button text="0" onPress={() => this.HandleTap('number', 0)} />
             <Button text="." onPress={() => this.HandleTap('number', '.')} />
             <Button

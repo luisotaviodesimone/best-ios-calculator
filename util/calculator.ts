@@ -18,7 +18,9 @@ export type CalculatorAction =
   | 'equal'
   | 'clear'
   | 'posneg'
-  | 'percentage';
+  | 'percentage'
+  | 'selection'
+  | 'delete';
 
 const calculatorLogic = (
   type: CalculatorAction,
@@ -47,7 +49,20 @@ const calculatorLogic = (
     case 'percentage':
       result = {
         ...state,
-        currentValue: 'Not implemented yet',
+        previousValue: state.currentValue,
+        currentValue: 'Not implemented yet'
+      };
+      break;
+
+    case 'delete':
+      result = {
+        ...state,
+        previousValue: state.currentValue,
+        currentValue: removeCharacter(state),
+        pointerSelection: {
+          start: pointerSelection.start - 1,
+          end: pointerSelection.end - 1,
+        },
       };
       break;
 
