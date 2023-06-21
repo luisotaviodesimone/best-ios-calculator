@@ -9,7 +9,6 @@ import calculatorLogic, {
 } from './util/calculator';
 import { ISelection } from './util/formatting';
 
-// create class component of App
 export default class App extends Component {
   state: ICalculatorState = initialState;
 
@@ -19,7 +18,7 @@ export default class App extends Component {
   ) => {
     this.setState((state: ICalculatorState) => {
       console.log(
-        `\n🚀 \n file: App.tsx:15 \n App \n this.setState \n state:`,
+        `\n🚀 \n file: App.tsx:23 \n App \n this.setState \n state:`,
         JSON.stringify(state, null, 2)
       );
 
@@ -27,16 +26,24 @@ export default class App extends Component {
     });
   };
 
-  // render method
   render() {
     const { currentValue } = this.state;
 
     return (
       <View style={styles.container}>
         <SafeAreaView>
-          <Text style={styles.valueText}>{currentValue}</Text>
+          <TextInput
+            showSoftInputOnFocus={false}
+            contextMenuHidden={true}
+            selectionColor={'#d400ff'}
+            onSelectionChange={(event) => {
+              this.HandleTap('selection', event.nativeEvent.selection);
+            }}
+            style={styles.valueText}
+          >
+            {currentValue}
+          </TextInput>
 
-          {/* Do create componentRow */}
           <Row>
             <Button
               text="C"
