@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 import Button from './components/Button';
 import Row from './components/Row';
 import calculatorLogic, {
@@ -7,13 +7,16 @@ import calculatorLogic, {
   ICalculatorState,
   initialState,
 } from './util/calculator';
+import { ISelection } from './util/formatting';
 
 // create class component of App
 export default class App extends Component {
-  state = initialState;
+  state: ICalculatorState = initialState;
 
-  // handle tap method
-  HandleTap = (type: CalculatorAction, value?: string | number) => {
+  HandleTap = (
+    type: CalculatorAction,
+    value?: string | number | ISelection
+  ) => {
     this.setState((state: ICalculatorState) => {
       console.log(
         `\n🚀 \n file: App.tsx:15 \n App \n this.setState \n state:`,
@@ -60,7 +63,6 @@ export default class App extends Component {
             />
           </Row>
 
-          {/* Number */}
           <Row>
             {[7, 8, 9].map((number) => (
               <Button
