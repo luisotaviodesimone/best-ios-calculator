@@ -1,9 +1,11 @@
 import { ISelection } from './formatting';
 import {
-  addCharacter,
+  addNumber,
   handlePosNeg,
   handleEqual,
   removeCharacter,
+  addOperator,
+  addParenthesis,
 } from './handlers';
 
 export interface ICalculatorState {
@@ -16,8 +18,8 @@ export const initialState: ICalculatorState = {
   currentValue: '0',
   previousValue: '',
   pointerSelection: {
-    start: 1,
-    end: 1,
+    start: 0,
+    end: 0,
   },
 };
 
@@ -27,7 +29,7 @@ export type CalculatorAction =
   | 'equal'
   | 'clear'
   | 'posneg'
-  | 'percentage'
+  | 'parenthesis'
   | 'selection'
   | 'delete';
 
@@ -50,7 +52,7 @@ const calculatorLogic = (
     case 'number':
       result = {
         ...state,
-        currentValue: addCharacter(value as number | string, state),
+        currentValue: addNumber(value as number | string, state),
         pointerSelection: {
           start: pointerSelection.start + 1,
           end: pointerSelection.end + 1,
@@ -70,11 +72,10 @@ const calculatorLogic = (
       };
       break;
 
-    case 'percentage':
+    case 'parenthesis':
       result = {
         ...state,
-        previousValue: state.currentValue,
-        currentValue: 'Not implemented yet'
+        ...addParenthesis(state),
       };
       break;
 
@@ -93,23 +94,26 @@ const calculatorLogic = (
     case 'operator':
       result = {
         ...state,
-        previousValue: state.currentValue,
-        currentValue: addCharacter(value as number | string, state),
-        pointerSelection: {
-          start: pointerSelection.start + 1,
-          end: pointerSelection.end + 1,
-        },
+        // currentValue: addNumber(value as number | string, state),
+        ...addOperator(value as number | string, state),
       };
       break;
 
     case 'equal':
-      result = handleEqual(state);
+      result = {
+        ...handleEqual(state),
+      };
+
       break;
 
     default:
       result = { ...state };
       break;
   }
+
+  console.log(
+    `\n🚀Calculator State Ending🚀:\n${JSON.stringify(result, null, 2)}\n`
+  );
 
   return result;
 };

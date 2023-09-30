@@ -18,8 +18,7 @@ export default class App extends Component {
   ) => {
     this.setState((state: ICalculatorState) => {
       console.log(
-        `\n🚀 \n file: App.tsx:23 \n App \n this.setState \n state:`,
-        JSON.stringify(state, null, 2)
+        `\n🚀Calculator State Beginning🚀:\n${JSON.stringify(state, null, 2)}\n`
       );
 
       return calculatorLogic(type, value, state);
@@ -60,7 +59,7 @@ export default class App extends Component {
             <Button
               text="( )"
               theme="secondary"
-              onPress={() => this.HandleTap('percentage')}
+              onPress={() => this.HandleTap('parenthesis')}
             />
 
             <Button
