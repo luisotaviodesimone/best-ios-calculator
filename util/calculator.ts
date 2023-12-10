@@ -1,91 +1,121 @@
+import { ISelection } from './formatting';
+import {
+  addNumber,
+  handlePosNeg,
+  handleEqual,
+  removeCharacter,
+  addOperator,
+  addParenthesis,
+} from './handlers';
+
 export interface ICalculatorState {
   currentValue: string;
-  operator: string;
-  previousValue: string;
+  previousValue: string | null;
+  pointerSelection: ISelection;
 }
 
 export const initialState: ICalculatorState = {
   currentValue: '0',
-  operator: '',
   previousValue: '',
+  pointerSelection: {
+    start: 0,
+    end: 0,
+  },
 };
 
-export const handleNumber = (value: any, state: ICalculatorState) => {
-  if (state.currentValue === '0') {
-    return { currentValue: `${value}` };
-  }
+export type CalculatorAction =
+  | 'number'
+  | 'operator'
+  | 'equal'
+  | 'clear'
+  | 'posneg'
+  | 'parenthesis'
+  | 'selection'
+  | 'delete';
 
-  return {
-    currentValue: `${state.currentValue}${value}`,
-  };
-};
+const calculatorLogic = (
+  type: CalculatorAction,
+  value: number | string | undefined | ISelection,
+  state: ICalculatorState
+) => {
+  const { currentValue, previousValue, pointerSelection } = state;
+  let result: ICalculatorState;
 
-const handleEqual = (state: ICalculatorState) => {
-  const { currentValue, previousValue, operator } = state;
-
-  const current = parseFloat(currentValue);
-  const previous = parseFloat(previousValue);
-  const resetState = { operator: null, previousValue: null };
-
-  switch (operator) {
-    case '+':
-      return {
-        currentValue: `${previous + current}`,
-        ...resetState,
-      };
-    case '-':
-      return {
-        currentValue: `${previous - current}`,
-        ...resetState,
-      };
-    case '*':
-      return {
-        currentValue: `${previous * current}`,
-        ...resetState,
-      };
-    case '/':
-      return {
-        currentValue: `${previous / current}`,
-        ...resetState,
-      };
-
-    default:
-      return state;
-  }
-};
-
-// calculator function
-const calculator = (type: any, value: any, state: ICalculatorState) => {
   switch (type) {
+    case 'selection':
+      result = {
+        ...state,
+        pointerSelection: value as ISelection,
+      };
+      break;
+
     case 'number':
-      return handleNumber(value, state);
+      result = {
+        ...state,
+        currentValue: addNumber(value as number | string, state),
+        pointerSelection: {
+          start: pointerSelection.start + 1,
+          end: pointerSelection.end + 1,
+        },
+      };
+      break;
 
     case 'clear':
-      return initialState;
+      result = initialState;
+      break;
 
     case 'posneg':
-      return {
-        currentValue: `${parseFloat(state.currentValue) * -1}`,
+      result = {
+        ...state,
+        currentValue: handlePosNeg(state).toString(),
+        previousValue: state.currentValue,
       };
+      break;
 
-    case 'percentage':
-      return {
-        currentValue: `${parseFloat(state.currentValue) * 0.01}`,
+    case 'parenthesis':
+      result = {
+        ...state,
+        ...addParenthesis(state),
       };
+      break;
+
+    case 'delete':
+      result = {
+        ...state,
+        previousValue: state.currentValue,
+        currentValue: removeCharacter(state),
+        pointerSelection: {
+          start: pointerSelection.start - 1,
+          end: pointerSelection.end - 1,
+        },
+      };
+      break;
 
     case 'operator':
-      return {
-        operator: value,
-        previousValue: state.currentValue,
-        currentValue: '0',
+      result = {
+        ...state,
+        // currentValue: addNumber(value as number | string, state),
+        ...addOperator(value as number | string, state),
       };
+      break;
 
     case 'equal':
-      return handleEqual(state);
+      result = {
+        ...handleEqual(state),
+      };
+
+      break;
 
     default:
-      return state;
+      result = { ...state };
+      break;
   }
+
+  console.log(
+    `\n🚀Calculator State Ending🚀:\n${JSON.stringify(result, null, 2)}\n`
+  );
+
+  return result;
 };
 
-export default calculator;
+export default calculatorLogic;

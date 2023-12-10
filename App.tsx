@@ -1,36 +1,48 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
 import Button from './components/Button';
 import Row from './components/Row';
-import calculator, { ICalculatorState, initialState } from './util/calculator';
+import calculatorLogic, {
+  CalculatorAction,
+  ICalculatorState,
+  initialState,
+} from './util/calculator';
+import { ISelection } from './util/formatting';
 
-// create class component of App
 export default class App extends Component {
-  state = initialState;
+  state: ICalculatorState = initialState;
 
-  // handle tap method
-  HandleTap = (type: string, value?: string | number | undefined) => {
+  HandleTap = (
+    type: CalculatorAction,
+    value?: string | number | ISelection
+  ) => {
     this.setState((state: ICalculatorState) => {
       console.log(
-        `\n🚀 \n file: App.tsx:15 \n App \n this.setState \n state:`,
-        JSON.stringify(state, null, 2)
+        `\n🚀Calculator State Beginning🚀:\n${JSON.stringify(state, null, 2)}\n`
       );
 
-      return calculator(type, value, state);
+      return calculatorLogic(type, value, state);
     });
   };
 
-  // render method
   render() {
+    const { currentValue } = this.state;
+
     return (
       <View style={styles.container}>
-        {/* Status bae here */}
         <SafeAreaView>
-          <Text style={styles.value}>
-            {parseFloat(this.state.currentValue).toLocaleString()}
-          </Text>
+          <TextInput
+            showSoftInputOnFocus={false}
+            contextMenuHidden={true}
+            selectionColor={'#d400ff'}
+            onSelectionChange={(event) => {
+              this.HandleTap('selection', event.nativeEvent.selection);
+            }}
+            style={styles.valueText}
+          >
+            {currentValue}
+          </TextInput>
 
-          {/* Do create componentRow */}
           <Row>
             <Button
               text="C"
@@ -45,9 +57,9 @@ export default class App extends Component {
             />
 
             <Button
-              text="%"
+              text="( )"
               theme="secondary"
-              onPress={() => this.HandleTap('percentage')}
+              onPress={() => this.HandleTap('parenthesis')}
             />
 
             <Button
@@ -57,7 +69,6 @@ export default class App extends Component {
             />
           </Row>
 
-          {/* Number */}
           <Row>
             {[7, 8, 9].map((number) => (
               <Button
@@ -104,6 +115,7 @@ export default class App extends Component {
           </Row>
 
           <Row>
+            <Button text="DEL" onPress={() => this.HandleTap('delete')} />
             <Button text="0" onPress={() => this.HandleTap('number', 0)} />
             <Button text="." onPress={() => this.HandleTap('number', '.')} />
             <Button
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#202020',
     justifyContent: 'flex-end',
   },
-  value: {
+  valueText: {
     color: '#fff',
     fontSize: 42,
     textAlign: 'right',
